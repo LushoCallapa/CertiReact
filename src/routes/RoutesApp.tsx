@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "../layout/Layout";
 import Subasta from "../Pages/user/Subasta";
-import Historial from "../Pages/user/Historial";
-import Resultados from "../Pages/user/Resultados";
+import HistorialPage from "../Pages/user/Historial";
 import GestionProductos from "../Pages/pages/GestionProductos";
 import GestionUsuarios from "../Pages/pages/GestionUsuarios";
 import LoginPage from "../Pages/LoginPage";
@@ -25,8 +24,7 @@ const RoutesApp = () => {
               <>
                 <Route path="user/subasta" element={<Subasta />} />
                 <Route path="user/pujas/:idProducto" element={<PujasPage />} />
-                <Route path="user/historial" element={<Historial />} />
-                <Route path="user/resultados" element={<Resultados />} />
+                <Route path="user/historial" element={<HistorialPage />} />
               </>
             )}
 
