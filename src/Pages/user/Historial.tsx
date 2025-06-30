@@ -26,14 +26,20 @@ const HistorialPage = () => {
   const [productos, setProductos] = useState<Product[]>([]);
   const { user } = useUser();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const allPujas = await getPujas();
-      const allProductos = await getProducts();
+  const fetchData = async () => {
+    const allPujas = await getPujas();
+    const allProductos = await getProducts();
 
-      setPujas(allPujas);
-      setProductos(allProductos);
-    };
+    const productosNormalizados = allProductos.map((p: Product) => ({
+      ...p,
+      id: Number(p.id),
+    }));
+
+    setPujas(allPujas);
+    setProductos(productosNormalizados);
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -45,6 +51,7 @@ const HistorialPage = () => {
   const pujasUsuario = pujas.filter((puja) => puja.usuarioId === user?.id);
 
   const pujasAgrupadas = productos
+    .filter((producto) => producto.estado === "pasada")
     .map((producto) => {
       const pujasProducto = pujas.filter((p) => p.productoId === producto.id);
       if (pujasProducto.length === 0) return null;
@@ -63,11 +70,11 @@ const HistorialPage = () => {
       };
     })
     .filter(Boolean) as {
-    producto: Product;
-    pujas: Puja[];
-    ganador: Puja;
-    usuarioGano: boolean;
-  }[];
+      producto: Product;
+      pujas: Puja[];
+      ganador: Puja;
+      usuarioGano: boolean;
+    }[];
 
   return (
     <Box sx={{ p: 4 }}>

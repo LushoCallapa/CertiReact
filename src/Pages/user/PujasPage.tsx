@@ -13,33 +13,25 @@ import {
 import type { Product } from "../../interfaces/Product";
 import type { Puja } from "../../interfaces/Pujas";
 import type { User } from "../../interfaces/User";
-import { getProductById } from "../../services/productService";
+import { getProductById, updateProduct } from "../../services/productService";
 import { getPujasByProducto, postPuja } from "../../services/pujasService";
 import { getUsuarios } from "../../services/authService";
 import { useUser } from "../../context/UserContext";
 
-const formatTime = (totalSeconds: number) => {
-  const h = Math.floor(totalSeconds / 3600)
-    .toString()
-    .padStart(2, "0");
-  const m = Math.floor((totalSeconds % 3600) / 60)
-    .toString()
-    .padStart(2, "0");
-  const s = (totalSeconds % 60).toString().padStart(2, "0");
-  return `${h}:${m}:${s}`;
-};
-
 const PujasPage = () => {
+  const formatTime = (totalSeconds: number) => {
+    const h = Math.floor(totalSeconds / 3600)
+      .toString()
+      .padStart(2, "0");
+    const m = Math.floor((totalSeconds % 3600) / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = (totalSeconds % 60).toString().padStart(2, "0");
+    return `${h}:${m}:${s}`;
+  };
+
   const { idProducto } = useParams<{ idProducto: string }>();
-  const [producto, setProducto] = useState<Product>({
-    id: 0,
-    duracion: 0,
-    titulo: "",
-    descripcion: "",
-    estado: "actual",
-    precioBase: 0,
-    imagen: "",
-  });
+  const [producto, setProducto] = useState<Product | null>(null);
   const [pujas, setPujas] = useState<Puja[]>([]);
   const [usuarios, setUsuarios] = useState<User[]>([]);
   const [oferta, setOferta] = useState("");
@@ -56,9 +48,11 @@ const PujasPage = () => {
       const pujas = await getPujasByProducto(id);
       const usuarios = await getUsuarios();
       setProducto(productos);
-      setPujas(pujas);
+      const pujasOrdenadas = pujas.sort((a, b) => b.monto - a.monto);
+      setPujas(pujasOrdenadas);
       setUsuarios(usuarios);
-      let tiempo = productos.duracion;
+
+      const tiempo = productos.duracion;
       setTiempoRestante(tiempo > 0 ? tiempo : 0);
     } catch (error) {
       console.error("Error fetching product:", error);
@@ -71,14 +65,35 @@ const PujasPage = () => {
   }, [idProducto]);
 
   useEffect(() => {
-    if (tiempoRestante <= 0) return;
+    if (!producto || producto.estado !== "actual") return;
+
+    if (tiempoRestante <= 0) {
+      const updateProductStatus = async () => {
+        try {
+          console.log("Actualizando estado del producto a 'pasada'", producto);
+          await updateProduct(producto.id, {
+            ...producto,
+            duracion: 0,
+            estado: "pasada",
+          });
+          setProducto((prev) =>
+            prev ? { ...prev, duracion: 0, estado: "pasada" } : prev
+          );
+        } catch (error) {
+          console.error("Error actualizando producto:", error);
+        }
+      };
+
+      updateProductStatus();
+      return;
+    }
 
     const timer = setInterval(() => {
       setTiempoRestante((t) => (t > 0 ? t - 1 : 0));
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [tiempoRestante]);
+  }, [tiempoRestante, producto]);
 
   const getNombreUsuario = (usuarioId: string) => {
     const user = usuarios.find((u) => u.id === usuarioId);
@@ -145,14 +160,12 @@ const PujasPage = () => {
     };
 
     sseRef.current.onmessage = (event) => {
-      console.log("Evento SSE recibido:", event.data);
       try {
         const data = JSON.parse(event.data);
         if (
           data.tipo === "nueva_puja" &&
           data.puja?.productoId === Number(idProducto)
         ) {
-          console.log("Actualizando pujas con:", data.puja);
           setPujas((prev) => [data.puja, ...prev]);
         }
       } catch (error) {
@@ -167,7 +180,6 @@ const PujasPage = () => {
     };
 
     return () => {
-      console.log("Cerrando conexión SSE");
       sseRef.current?.close();
       sseRef.current = null;
     };

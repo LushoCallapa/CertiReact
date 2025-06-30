@@ -29,3 +29,13 @@ export const getUsuarios = async () => {
   const response = await jsonServerInstance.get<User[]>(`/usuarios`);
   return response.data;
 };
+
+export const updateUsuario = async (usuarioActualizado: User) => {
+  const { id, ...restoDatos } = usuarioActualizado;
+  const response = await jsonServerInstance.put(`/usuarios/${id}`, restoDatos);
+  return response.data;
+};
+
+export const deleteUsuario = async (id: string) => {
+  await jsonServerInstance.delete(`/usuarios/${id}`);
+};

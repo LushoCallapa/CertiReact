@@ -4,7 +4,10 @@ import { sseInstance } from "../api/sseInstance";
 
 export const getPujasByProducto = async (productoId: string)=> {
   try {
-    const response = await jsonServerInstance.get<Puja[]>(`/pujas?idProducto=${productoId}&_sort=monto&_order=asc`);
+    const response = await jsonServerInstance.get<Puja[]>('/pujas', {
+      params: { productoId },
+    });
+    console.log(`Pujas for productoId ${productoId}:`, response.data);
     return response.data;
   } catch (error) {
     console.error(`Error fetching pujas for productoId ${productoId}:`, error);

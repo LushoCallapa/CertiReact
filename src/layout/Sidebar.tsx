@@ -11,7 +11,6 @@ import {
 
 import GavelIcon from "@mui/icons-material/Gavel";
 import HistoryIcon from "@mui/icons-material/History";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import GroupIcon from "@mui/icons-material/Group";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -62,19 +61,6 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, isMobile }: SidebarProps) => 
                   <HistoryIcon />
                 </ListItemIcon>
                 <ListItemText primary="Historial" />
-              </ListItemButton>
-            </ListItem>
-
-            <ListItem disablePadding>
-              <ListItemButton
-                component={Link}
-                to="/user/resultados"
-                selected={location.pathname === "/user/resultados"}
-              >
-                <ListItemIcon>
-                  <EmojiEventsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Resultados" />
               </ListItemButton>
             </ListItem>
           </>

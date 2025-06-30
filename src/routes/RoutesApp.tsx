@@ -8,6 +8,7 @@ import LoginPage from "../Pages/LoginPage";
 import RegisterPage from "../Pages/RegisterPage";
 import { useUser } from "../context/UserContext";
 import PujasPage from "../Pages/user/PujasPage";
+import AdminRoute from "./AdminRoute";
 
 const RoutesApp = () => {
   const { user } = useUser();
@@ -29,10 +30,17 @@ const RoutesApp = () => {
             )}
 
             {user.rol === "admin" && (
-              <>
-                <Route path="admin/productos" element={<GestionProductos />} />
-                <Route path="admin/usuarios" element={<GestionUsuarios />} />
-              </>
+              <Route
+                path="admin/*"
+                element={
+                  <AdminRoute>
+                    <Routes>
+                      <Route path="productos" element={<GestionProductos />} />
+                      <Route path="usuarios" element={<GestionUsuarios />} />
+                    </Routes>
+                  </AdminRoute>
+                }
+              />
             )}
           </Route>
         )}

@@ -13,42 +13,42 @@
       "rol": "usuario"
     },
     {
-      "id": "3",
-      "nombre": "usuario2",
+      "nombre": "usuario21",
       "password": "usuario456",
-      "rol": "usuario"
+      "rol": "usuario",
+      "id": "3"
     }
   ],
   "productos": [
     {
-      "id": 1,
+      "id": "1",
       "titulo": "PlayStation 5",
       "descripcion": "Consola nueva, edición limitada.",
       "imagen": "https://hiraoka.com.pe/media/mageplaza/blog/post/p/s/ps5-playstation-5.jpg",
       "precioBase": 400,
-      "duracion": 7200,
-      "estado": "actual"
+      "duracion": 0,
+      "estado": "pasada"
     },
     {
-      "id": 2,
+      "id": "2",
       "titulo": "Xbox Series X",
       "descripcion": "Consola de última generación.",
       "imagen": "https://cdn.gameplanet.com/wp-content/uploads/2022/09/03134301/series_x_2_2.jpg",
-      "precioBase": 450,
+      "precioBase": 451,
       "duracion": 7200,
       "estado": "actual"
     },
     {
-      "id": 3,
+      "id": "3",
       "titulo": "Nintendo Switch",
       "descripcion": "Consola híbrida, perfecta para jugar en casa o en movimiento.",
-      "imagen": "https://cdn.shopify.com/s/files/1/0014/8852/0920/products/nintendo-switch-2_1024x1024.jpg?v=1616161616",
+      "imagen": "https://media.wired.com/photos/5984914f2b5c9d564887b75c/3:2/w_2560%2Cc_limit/nintendo-switch2_TA.jpg",
       "precioBase": 300,
       "duracion": 0,
       "estado": "pasada"
     },
     {
-      "id": 4,
+      "id": "4",
       "titulo": "PC Gaming",
       "descripcion": "Potente PC para juegos de última generación.",
       "imagen": "https://www.example.com/pc-gaming.jpg",
@@ -59,28 +59,28 @@
   ],
   "pujas": [
     {
-      "id": 1,
+      "id": "1",
       "productoId": 1,
       "usuarioId": "2",
       "monto": 450,
       "fecha": "2023-10-01T12:00:00Z"
     },
     {
-      "id": 2,
+      "id": "2",
       "productoId": 1,
       "usuarioId": "2",
       "monto": 1234,
       "fecha": "2025-06-30T06:52:53.618Z"
     },
     {
-      "id": 3,
+      "id": "3",
       "productoId": 1,
       "usuarioId": "3",
       "monto": 2345,
       "fecha": "2025-06-30T06:53:50.163Z"
     },
     {
-      "id": 4,
+      "id": "4",
       "productoId": 1,
       "usuarioId": "2",
       "monto": 5678,
