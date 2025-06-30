@@ -26,7 +26,15 @@ const Subasta = () => {
         .filter(p => p.estado === estado)
         .map(p => (
           <Grid  key={p.id} size={{ xs: 12, sm: 6, md: 4 }}>
-            <ProductCard product={p} />
+            {estado === "actual" ? (
+              <Box
+                sx={{ cursor: "pointer" }}
+              >
+                <ProductCard product={p} />
+              </Box>
+            ) : (
+              <ProductCard product={p} />
+            )}
           </Grid>
         ))}
     </Grid>

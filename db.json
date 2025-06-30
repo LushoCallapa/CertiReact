@@ -11,6 +11,12 @@
       "nombre": "usuario1",
       "password": "usuario123",
       "rol": "usuario"
+    },
+    {
+      "id": "3",
+      "nombre": "usuario2",
+      "password": "usuario456",
+      "rol": "usuario"
     }
   ],
   "productos": [
@@ -21,49 +27,64 @@
       "imagen": "https://hiraoka.com.pe/media/mageplaza/blog/post/p/s/ps5-playstation-5.jpg",
       "precioBase": 400,
       "duracion": 7200,
-      "estado": "actual",
-      "pujas":[]
-
-    },{
+      "estado": "actual"
+    },
+    {
       "id": 2,
       "titulo": "Xbox Series X",
       "descripcion": "Consola de última generación.",
       "imagen": "https://cdn.gameplanet.com/wp-content/uploads/2022/09/03134301/series_x_2_2.jpg",
       "precioBase": 450,
       "duracion": 7200,
-      "estado": "actual",
-      "pujas":[]
-    },{
+      "estado": "actual"
+    },
+    {
       "id": 3,
       "titulo": "Nintendo Switch",
       "descripcion": "Consola híbrida, perfecta para jugar en casa o en movimiento.",
       "imagen": "https://cdn.shopify.com/s/files/1/0014/8852/0920/products/nintendo-switch-2_1024x1024.jpg?v=1616161616",
       "precioBase": 300,
       "duracion": 0,
-      "estado": "pasada",
-      "pujas": [
-        {
-          "id": 1,
-          "usuarioId": "2",
-          "monto": 320,
-          "fecha": "2023-10-01T12:00:00Z"
-        },
-        {
-          "id": 2,
-          "usuarioId": "1",
-          "monto": 350,
-          "fecha": "2023-10-01T13:00:00Z"
-        }
-      ]
-    },{
+      "estado": "pasada"
+    },
+    {
       "id": 4,
       "titulo": "PC Gaming",
       "descripcion": "Potente PC para juegos de última generación.",
       "imagen": "https://www.example.com/pc-gaming.jpg",
       "precioBase": 1200,
       "duracion": 10800,
-      "estado": "proxima",
-      "pujas": []
+      "estado": "proxima"
+    }
+  ],
+  "pujas": [
+    {
+      "id": 1,
+      "productoId": 1,
+      "usuarioId": "2",
+      "monto": 450,
+      "fecha": "2023-10-01T12:00:00Z"
+    },
+    {
+      "id": 2,
+      "productoId": 1,
+      "usuarioId": "2",
+      "monto": 1234,
+      "fecha": "2025-06-30T06:52:53.618Z"
+    },
+    {
+      "id": 3,
+      "productoId": 1,
+      "usuarioId": "3",
+      "monto": 2345,
+      "fecha": "2025-06-30T06:53:50.163Z"
+    },
+    {
+      "id": 4,
+      "productoId": 1,
+      "usuarioId": "2",
+      "monto": 5678,
+      "fecha": "2025-06-30T06:54:46.601Z"
     }
   ]
 }

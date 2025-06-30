@@ -8,6 +8,7 @@ import GestionUsuarios from "../Pages/pages/GestionUsuarios";
 import LoginPage from "../Pages/LoginPage";
 import RegisterPage from "../Pages/RegisterPage";
 import { useUser } from "../context/UserContext";
+import PujasPage from "../Pages/user/PujasPage";
 
 const RoutesApp = () => {
   const { user } = useUser();
@@ -23,6 +24,7 @@ const RoutesApp = () => {
             {user.rol === "usuario" && (
               <>
                 <Route path="user/subasta" element={<Subasta />} />
+                <Route path="user/pujas/:idProducto" element={<PujasPage />} />
                 <Route path="user/historial" element={<Historial />} />
                 <Route path="user/resultados" element={<Resultados />} />
               </>

@@ -1,7 +1,9 @@
 import { Card, CardContent, CardMedia, Chip, Typography } from "@mui/material";
 import type { Product } from "../interfaces/Product";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ product }: { product: Product }) => {
+      const navigate = useNavigate();
   const formatSecondsToHHMMSS = (seconds: number) => {
     const hrs = Math.floor(seconds / 3600)
       .toString()
@@ -14,7 +16,7 @@ const ProductCard = ({ product }: { product: Product }) => {
   };
 
   return (
-    <Card sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+    <Card sx={{ display: "flex", flexDirection: "column", height: "100%" }} onClick={() => navigate(`/user/pujas/${product.id}`)}>
       <CardMedia
         component="img"
         height="180"
