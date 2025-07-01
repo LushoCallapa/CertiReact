@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Typography,
@@ -50,7 +50,7 @@ const HistorialPage = () => {
 
   const pujasUsuario = pujas.filter((puja) => puja.usuarioId === user?.id);
 
-  const pujasAgrupadas = productos
+  const pujasAgrupadas = useMemo(() => productos
     .filter((producto) => producto.estado === "pasada")
     .map((producto) => {
       const pujasProducto = pujas.filter((p) => p.productoId === producto.id);
@@ -74,7 +74,7 @@ const HistorialPage = () => {
       pujas: Puja[];
       ganador: Puja;
       usuarioGano: boolean;
-    }[];
+    }[], [productos, pujas, user]);
 
   return (
     <Box sx={{ p: 4 }}>
