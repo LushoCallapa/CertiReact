@@ -12,11 +12,11 @@ import * as yup from "yup";
 import type { Product } from "../../../interfaces/Product";
 
 const validationSchema = yup.object({
-  titulo: yup.string().required("Título es requerido"),
-  descripcion: yup.string().required("Descripción es requerida"),
+  titulo: yup.string().required("Título es requerido").min(3, "Título debe tener al menos 3 caracteres").max(25, "Título no puede exceder los 25 caracteres"),
+  descripcion: yup.string().required("Descripción es requerida").min(10, "Descripción debe tener al menos 10 caracteres").max(500, "Descripción no puede exceder los 500 caracteres"),
   imagen: yup.string().url("Debe ser una URL válida").required("Imagen es requerida"),
   precioBase: yup.number().min(1, "Precio base debe ser mayor que 0").required("Precio base es requerido"),
-  duracion: yup.number().min(1, "Duración debe ser mayor que 0").required("Duración es requerida"),
+  duracion: yup.number().min(300, "Duración debe ser mayor que una hora").required("Duración es requerida"),
 });
 
 type Props = {

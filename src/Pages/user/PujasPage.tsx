@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { usePujasStore } from "../../store/pujasStore";
 import {
   Box,
   Typography,
@@ -11,10 +12,8 @@ import {
   ListItemText,
 } from "@mui/material";
 import type { Product } from "../../interfaces/Product";
-import type { Puja } from "../../interfaces/Pujas";
 import type { User } from "../../interfaces/User";
 import { getProductById, updateProduct } from "../../services/productService";
-import { getPujasByProducto, postPuja } from "../../services/pujasService";
 import { getUsuarios } from "../../services/authService";
 import { useUser } from "../../context/UserContext";
 
@@ -30,14 +29,14 @@ const PujasPage = () => {
     return `${h}:${m}:${s}`;
   };
 
+  const { pujas = [], loading, createPuja, fetchPujas, setPuja } = usePujasStore();
+  const [montoActual, setMontoActual] = useState<number>(0);
   const { idProducto } = useParams<{ idProducto: string }>();
   const [producto, setProducto] = useState<Product | null>(null);
-  const [pujas, setPujas] = useState<Puja[]>([]);
   const [usuarios, setUsuarios] = useState<User[]>([]);
   const [oferta, setOferta] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [exito, setExito] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const [tiempoRestante, setTiempoRestante] = useState<number>(0);
   const { user } = useUser();
   const sseRef = useRef<EventSource | null>(null);
@@ -45,13 +44,10 @@ const PujasPage = () => {
   const fetchProduct = async (id: string) => {
     try {
       const productos = await getProductById(id);
-      const pujas = await getPujasByProducto(id);
+      await fetchPujas(id);
       const usuarios = await getUsuarios();
-      setProducto(productos);
-      const pujasOrdenadas = pujas.sort((a, b) => b.monto - a.monto);
-      setPujas(pujasOrdenadas);
       setUsuarios(usuarios);
-
+      setProducto(productos);
       const tiempo = productos.duracion;
       setTiempoRestante(tiempo > 0 ? tiempo : 0);
     } catch (error) {
@@ -60,17 +56,22 @@ const PujasPage = () => {
   };
 
   useEffect(() => {
+    if (pujas && pujas.length > 0) {
+      const maxMonto = Math.max(...pujas.map((p) => p.monto));
+      setMontoActual(maxMonto);
+    } else if (producto) {
+      setMontoActual(producto.precioBase);
+    }
+  }, [pujas, producto]);
+
+  useEffect(() => {
     if (!idProducto) return;
     fetchProduct(idProducto);
   }, [idProducto]);
 
-  useEffect(() => {
-    if (!producto || producto.estado !== "actual") return;
-
-    if (tiempoRestante <= 0) {
-      const updateProductStatus = async () => {
+  const updateProductStatus = async () => {
+        if (!producto) return;
         try {
-          console.log("Actualizando estado del producto a 'pasada'", producto);
           await updateProduct(producto.id, {
             ...producto,
             duracion: 0,
@@ -84,12 +85,30 @@ const PujasPage = () => {
         }
       };
 
+  const updatedProduct = async (tiempo: number, producto: Product) => {
+    try{
+      await updateProduct(Number(idProducto), {
+          ...producto,
+          duracion: tiempo - 1,
+        });
+    }catch (error) {
+      console.error("Error actualizando producto:", error);
+    }
+  }
+
+  useEffect(() => {
+    if (!producto || producto.estado !== "actual") return;
+
+    if (tiempoRestante <= 0) {
       updateProductStatus();
       return;
     }
 
     const timer = setInterval(() => {
       setTiempoRestante((t) => (t > 0 ? t - 1 : 0));
+      if (idProducto) {
+        updatedProduct(tiempoRestante, producto);
+      }
     }, 1000);
 
     return () => clearInterval(timer);
@@ -99,11 +118,6 @@ const PujasPage = () => {
     const user = usuarios.find((u) => u.id === usuarioId);
     return user ? user.nombre : "Usuario desconocido";
   };
-
-  const montoActual =
-    pujas.length > 0
-      ? Math.max(...pujas.map((p) => p.monto))
-      : producto?.precioBase || 0;
 
   const handleOferta = async () => {
     setError(null);
@@ -125,11 +139,9 @@ const PujasPage = () => {
       return;
     }
 
-    setLoading(true);
-
     try {
       const productoId = parseInt(idProducto || "0", 10);
-      await postPuja({
+      await createPuja({
         id: 0,
         productoId: productoId,
         usuarioId: user.id,
@@ -141,8 +153,6 @@ const PujasPage = () => {
       setOferta("");
     } catch (e: any) {
       setError("Error al realizar la oferta. Intenta nuevamente.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -155,9 +165,7 @@ const PujasPage = () => {
 
     sseRef.current = new EventSource("http://localhost:3001/events");
 
-    sseRef.current.onopen = () => {
-      console.log("Conexión SSE abierta");
-    };
+    sseRef.current.onopen = () => {};
 
     sseRef.current.onmessage = (event) => {
       try {
@@ -166,7 +174,7 @@ const PujasPage = () => {
           data.tipo === "nueva_puja" &&
           data.puja?.productoId === Number(idProducto)
         ) {
-          setPujas((prev) => [data.puja, ...prev]);
+          setPuja(data.puja);
         }
       } catch (error) {
         console.error("Error parsing SSE data:", error);
@@ -279,17 +287,20 @@ const PujasPage = () => {
           </Typography>
 
           <List>
-            {pujas.length === 0 && <Typography>No hay pujas aún.</Typography>}
-            {pujas.map((puja) => (
-              <ListItem key={puja.id} divider>
-                <ListItemText
-                  primary={`Usuario: ${getNombreUsuario(puja.usuarioId)}`}
-                  secondary={`Monto: $${puja.monto} - Fecha: ${new Date(
-                    puja.fecha
-                  ).toLocaleString()}`}
-                />
-              </ListItem>
-            ))}
+            {(!pujas || pujas.length === 0) && (
+              <Typography>No hay pujas aún.</Typography>
+            )}
+            {pujas &&
+              pujas.map((puja) => (
+                <ListItem key={puja.id} divider>
+                  <ListItemText
+                    primary={`Usuario: ${getNombreUsuario(puja.usuarioId)}`}
+                    secondary={`Monto: $${puja.monto} - Fecha: ${new Date(
+                      puja.fecha
+                    ).toLocaleString()}`}
+                  />
+                </ListItem>
+              ))}
           </List>
         </>
       ) : (

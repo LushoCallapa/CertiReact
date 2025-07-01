@@ -7,13 +7,13 @@
       "rol": "admin"
     },
     {
-      "id": "2",
-      "nombre": "usuario1",
+      "nombre": "usuario123",
       "password": "usuario123",
-      "rol": "usuario"
+      "rol": "usuario",
+      "id": "2"
     },
     {
-      "nombre": "usuario21",
+      "nombre": "usuario213",
       "password": "usuario456",
       "rol": "usuario",
       "id": "3"
@@ -35,7 +35,7 @@
       "descripcion": "Consola de última generación.",
       "imagen": "https://cdn.gameplanet.com/wp-content/uploads/2022/09/03134301/series_x_2_2.jpg",
       "precioBase": 451,
-      "duracion": 7200,
+      "duracion": 7133,
       "estado": "actual"
     },
     {
@@ -59,32 +59,67 @@
   ],
   "pujas": [
     {
-      "id": "1",
+      "id": 1,
       "productoId": 1,
       "usuarioId": "2",
       "monto": 450,
       "fecha": "2023-10-01T12:00:00Z"
     },
     {
-      "id": "2",
+      "id": 2,
       "productoId": 1,
       "usuarioId": "2",
       "monto": 1234,
       "fecha": "2025-06-30T06:52:53.618Z"
     },
     {
-      "id": "3",
+      "id": 3,
       "productoId": 1,
       "usuarioId": "3",
       "monto": 2345,
       "fecha": "2025-06-30T06:53:50.163Z"
     },
     {
-      "id": "4",
+      "id": 4,
       "productoId": 1,
       "usuarioId": "2",
       "monto": 5678,
       "fecha": "2025-06-30T06:54:46.601Z"
+    },
+    {
+      "id": 5,
+      "productoId": 2,
+      "usuarioId": "2",
+      "monto": 452,
+      "fecha": "2025-07-01T01:47:22.297Z"
+    },
+    {
+      "id": 6,
+      "productoId": 2,
+      "usuarioId": "2",
+      "monto": 453,
+      "fecha": "2025-07-01T01:49:16.453Z"
+    },
+    {
+      "id": 7,
+      "productoId": 2,
+      "usuarioId": "2",
+      "monto": 455,
+      "fecha": "2025-07-01T02:07:43.353Z"
+    },
+    {
+      "id": 8,
+      "productoId": 1,
+      "usuarioId": "2",
+      "monto": 5679,
+      "fecha": "2025-07-01T02:15:44.519Z"
+    },
+    {
+      "id": 9,
+      "productoId": 1,
+      "usuarioId": "3",
+      "monto": 5680,
+      "fecha": "2025-07-01T02:15:53.635Z"
     }
   ]
 }

@@ -46,8 +46,6 @@ export const updateProduct = async (id: number, product: Product) => {
 
 export const deleteProduct = async (id: number) => {
   try {
-        const existingProduct = await getProductById(id.toString());
-    console.log(existingProduct);
     await jsonServerInstance.delete(`/productos/${id}`);
   } catch (error) {
     console.error(`Error deleting product with id ${id}:`, error);

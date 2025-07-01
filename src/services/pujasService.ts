@@ -7,7 +7,6 @@ export const getPujasByProducto = async (productoId: string)=> {
     const response = await jsonServerInstance.get<Puja[]>('/pujas', {
       params: { productoId },
     });
-    console.log(`Pujas for productoId ${productoId}:`, response.data);
     return response.data;
   } catch (error) {
     console.error(`Error fetching pujas for productoId ${productoId}:`, error);

@@ -1,69 +1,56 @@
-# React + TypeScript + Vite
+# Plataforma de Subastas en Línea
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción del Proyecto
+Esta es una plataforma de subastas en línea donde los usuarios pueden:
+- Ver productos disponibles para subastar.
+- Realizar ofertas en tiempo real.
+- Seguir el progreso de cada subasta mediante un cronómetro.
 
-Currently, two official plugins are available:
+### Características principales:
+- **Registro de usuarios**: Los usuarios pueden registrarse eligiendo un rol (usuario o admin).
+- **Panel de administración**: Los admins pueden gestionar productos y usuarios desde un panel exclusivo.
+- **Actualización en tiempo real**: Las pujas se actualizan en tiempo real usando SSE (Server-Sent Events) simulados en Node.js.
+- **Historial de pujas**: Se registra el historial de pujas y resultados para que los usuarios puedan revisar sus actividades.
+- **Interfaz**: Desarrollada con **React** y **MUI**, con soporte multilenguaje (i18n).
+- **Backend simulado**: Utiliza **JSON Server** para la persistencia de datos de usuarios y productos.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Cómo levantar el proyecto
 
-## Expanding the ESLint configuration
+### Requisitos Previos
+- **Node.js** instalado (versión 14+ recomendada).
+- **npm**  instalado.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Backend con JSON Server y SSE
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. **Instalar dependencias**  
+   En la raíz del backend (o carpeta donde tengas el `index.js` y el `package.json`):
+   ```bash
+   npm install
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+2. **Iniciar JSON Server**  
+   Este servidor simula una base de datos REST con archivos JSON (`usuarios.json`, `products.json`).  
+   ```bash
+   npx json-server db.json
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+3. **Iniciar el servidor SSE (Server-Sent Events)**  
+   Este servidor se encuentra en la carpeta `/sse` y emite actualizaciones de pujas en tiempo real.  
+   Ejecuta lo siguiente desde la raíz del proyecto:
+   ```bash
+   node sse/index.js
+   ```
+   Asegúrate de que el archivo `index.js` esté ubicado en la carpeta `/sse` y que utilice un puerto (por ejemplo, 5000) diferente al de JSON Server.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Frontend
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. **Instalar dependencias**  
+   En la carpeta del frontend:
+   ```bash
+   npm install
+   ```
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+2. **Iniciar la app React**  
+   ```bash
+   npm run start
+   ```
